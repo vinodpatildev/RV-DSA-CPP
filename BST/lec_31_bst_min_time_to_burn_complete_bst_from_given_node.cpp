@@ -10,25 +10,13 @@ struct Node{
     }
 };
 class Solution {
-    Node* getTarget(Node* root,int target){
-        if(!root || root->data == target){
-            return root;
-        }
-        Node* left = getTarget(root->left,target);
-        Node* right = getTarget(root->right,target);
-        if(left){return left;}
-        if(right){return right;}
-        return NULL;
-    }
-  public:
-    int minTime(Node* root, int target){
-        int time = 0;
-        if(!root){return time;}
-        unordered_map <Node*,Node*> parent;
+    Node* bfsToMapParent(Node* root,unordered_map <Node*,Node*>& parent,int target){
+        Node* res = NULL;
         queue<Node*> todo;
         todo.push(root);
         while(!todo.empty()){
             Node* curr = todo.front(); todo.pop();
+            if(curr->data == target){res = curr;}
             if(curr->left){
                 parent[curr->left] = curr;
                 todo.push(curr->left);
@@ -38,10 +26,18 @@ class Solution {
                 todo.push(curr->right);
             }
         }
+        return res;
+    }
+  public:
+    int minTime(Node* root, int target){
+        int time = 0;
+        if(!root){return time;}
+        unordered_map <Node*,Node*> parent;
+        Node* target_node = bfsToMapParent(root,parent,target);
+        if(!target_node){return time;}
+        
         queue<Node*> burning;
         unordered_map <Node*,bool> visited;
-        Node* target_node = getTarget(root,target);
-        if(!target_node){return time;}
         burning.push(target_node);
         while(!burning.empty()){
             int size = burning.size();
