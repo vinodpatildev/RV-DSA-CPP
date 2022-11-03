@@ -10,17 +10,7 @@ struct Node{
     }
 };
 class Solution {
-    bool checkBST(Node* root, long int leftRange, long int rightRange){
-        if(!root){return true;}
-        if(root->data<=leftRange || root->data>=rightRange){return false;}
-        return checkBST(root->left,leftRange,root->data) && checkBST(root->right,root->data,rightRange);
-    }
-    public:
-    bool isValidBST(Node* root) {
-        long int leftRange = LONG_MIN;
-        long int rightRange = LONG_MAX;
-        return checkBST(root,leftRange,rightRange);
-    }
+public:
     Node* BSTInsertNode(Node* root,int data){
         if(!root){return new Node(data);}
         Node* curr = root;
@@ -28,16 +18,12 @@ class Solution {
         while(true){
             if(data < curr->data){
                 next = curr->left;
-                if(!next){
-                    curr->left = new Node(data);
-                    break;
-                }
             }else{
                 next = curr->right;
-                if(!next){
-                    curr->right = new Node(data);
-                    break;
-                }
+            }
+            if(!next){
+                curr = new Node(data);
+                break;
             }
             curr = next;
         }
@@ -45,7 +31,7 @@ class Solution {
     }
 };
 int main(){
-    struct Node* root = new Node(5);
+    struct Node* root = new Node(10);
     root->left = new Node(3);
     root->right = new Node(7);
     root->left->left = new Node(1);
@@ -55,6 +41,5 @@ int main(){
 
     Solution solution;
     root = solution.BSTInsertNode(root,12);
-    cout<<"validation :"<<solution.isValidBST(root)<<endl;
     return 0;
 }
